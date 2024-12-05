@@ -1,0 +1,15 @@
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: caddy-test
+    container_name: caddy
+    ports:
+      - 80:80
+    networks:
+      - kind
+
+networks:
+  kind:
+    external: true

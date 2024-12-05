@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: streamer
+  labels:
+    run: streamer
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: streamer
+  template:
+    metadata:
+      labels:
+        run: streamer
+    spec:
+      containers:
+        - image: nginx:latest
+          name: streamer
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.conf
+              name: site-config
+              subPath: default.conf
+            - mountPath: /var/www/html
+              name: videos
+      volumes:
+        - configMap:
+            name: streamer-cm
+            items:
+              - key: http.conf
+                path: default.conf
+          name: site-config 
+        - persistentVolumeClaim:
+            claimName: streamer-videos
+          name: videos

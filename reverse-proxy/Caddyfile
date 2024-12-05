@@ -1,0 +1,8 @@
+http://localhost:80 {
+    handle_path /stream/* {
+        reverse_proxy http://172.18.255.200:80
+    }
+    handle {
+        reverse_proxy http://172.18.255.201:8000
+    }
+}

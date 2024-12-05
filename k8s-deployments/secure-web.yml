@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: web
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: web
+  template:
+    metadata:
+      labels:
+        run: web
+    spec:
+      containers:
+        - image: docker.io/gintelecom/ginflix
+        # - image: nginx:latest
+          name: web
+          ports:
+            - containerPort: 8000
+          env:
+            - name: DB_HOST
+              value: database-service
+            - name: DB_NAME
+              value: ginflix
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DB_PASSWORD
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DB_USER
+            - name: DJANGO_SUPERUSER_EMAIL
+              value: "admin@ginflix.com"
+            - name: DJANGO_SUPERUSER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DJANGO_SUPERUSER_PASSWORD
+            - name: GUNICORN_ENABLE
+              value: "false"
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: SECRET_KEY
+            - name: ALLOWED_HOST
+              value: localhost
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"

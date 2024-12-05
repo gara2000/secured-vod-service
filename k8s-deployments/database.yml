@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    run: database
+  name: database
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      run: database
+  template:
+    metadata:
+      labels:
+        run: database
+    spec:
+      volumes:
+        - name: db-volume
+          persistentVolumeClaim:
+            claimName: db-data
+      containers:
+        - image: postgres:latest
+          name: database
+          ports:
+            - containerPort: 5432
+          env:
+            - name: POSTGRES_DB
+              value: ginflix
+            - name: POSTGRES_PASSWORD
+              value: tonic
+            - name: POSTGRES_USER
+              value: gin
+          volumeMounts:
+            - mountPath: /var/lib/postgres/data
+              name: db-volume
