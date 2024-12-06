@@ -72,7 +72,13 @@ clean: stop cluster-delete
 kubescape:
 	curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash
 scan:
-	kubescape scan -f html > scans/new_scan.html
+ifndef SCAN_NAME
+	@echo "Error: env var SCAN_NAME is not set. Please set it and try again." >&2
+	@exit 1
+endif
+	kubescape scan -f html > scans/$(SCAN_NAME).html
+	kubescape scan -f pdf > scans/$(SCAN_NAME).pdf
+	kubescape scan -f pretty-printer > scans/$(SCAN_NAME).pretty-printer
 ### END OF KUBESCAPE CONFIG ###
 
 
