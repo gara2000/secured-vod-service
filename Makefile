@@ -10,7 +10,7 @@ cluster-delete:
 	kind delete clusters ${CLUSTER_NAME}
 ### END OF KIND CLUSTER CONFIG ###
 
-### END OF APPLICATION ###
+### APPLICATION ###
 metallb:
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
 	kubectl apply -f loadbalancer/iprange.yml
@@ -56,21 +56,14 @@ _caddy:
 		cd reverse-proxy ; \
 		docker compose down --rmi all ; \
 	}
-
 STREAMER:=$(shell kubectl get pods -l run=streamer | awk -F' ' 'NR==2 {print $$1}')
 copy:
 	kubectl cp videos/${VID_NAME} $(STREAMER):/var/www/html/stock.mp4
 	kubectl exec -ti $(STREAMER) -- ls /var/www/html/
-
 launch: metallb database streamer web caddy 
 start:
 	while ! make launch ; do echo "Retrying..." ; sleep 20 ; done
 stop: _metallb _database _streamer _web _caddy
+### END OF APPLICATION ###
 
 clean: stop cluster-delete
-
-web-secrets:
-	kubectl create secret generic web-secrets --from-env-file=web-secrets.env
-database-secrets:
-	kubectl create secret generic database-secrets --from-env-file=database-secrets.env
-secrets: databse-secrets web-secrets
