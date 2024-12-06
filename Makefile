@@ -1,23 +1,23 @@
 CLUSTER_NAME=ginflix
 VID_NAME=stock_analysis.mp4
 
+### KIND CLUSTER CONFIG ###
 cluster-create:
 	- kind create cluster --name ${CLUSTER_NAME} --config kind-config.yml
 	- kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/tigera-operator.yaml
 	- kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/custom-resources.yaml
-
 cluster-delete:
 	kind delete clusters ${CLUSTER_NAME}
+### END OF KIND CLUSTER CONFIG ###
 
+### END OF APPLICATION ###
 metallb:
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
 	kubectl apply -f loadbalancer/iprange.yml
 	kubectl apply -f loadbalancer/l2advertisement.yml
-
 _metallb:
 	- kubectl delete -f loadbalancer/iprange.yml
 	- kubectl delete -f loadbalancer/l2advertisement.yml
-
 database:
 	kubectl apply -f volumes/database.yml
 	kubectl apply -f deployments/database.yml
@@ -26,7 +26,6 @@ _database:
 	- kubectl delete -f deployments/database.yml
 	- kubectl delete -f volumes/database.yml
 	- kubectl delete -f services/database.yml
-
 streamer:
 	kubectl apply -f volumes/streamer.yml
 	kubectl apply -f deployments/streamer.yml
@@ -35,7 +34,6 @@ _streamer:
 	- kubectl delete -f deployments/streamer.yml
 	- kubectl delete -f volumes/streamer.yml
 	- kubectl delete -f services/streamer.yml
-
 web:
 	kubectl wait --for=condition=ready pod/$$(kubectl get pods --no-headers | awk -F' ' '{print $$1'} | grep database) --timeout=300s
 	kubectl apply -f deployments/web.yml
@@ -43,7 +41,6 @@ web:
 _web:
 	- kubectl delete -f deployments/web.yml
 	- kubectl delete -f services/web.yml
-
 caddy:
 	{ \
 		cd reverse-proxy ; \
