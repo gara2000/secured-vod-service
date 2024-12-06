@@ -67,3 +67,21 @@ stop: _metallb _database _streamer _web _caddy
 ### END OF APPLICATION ###
 
 clean: stop cluster-delete
+
+### KUBESCAPE CONFIG ###
+kubescape:
+	curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash
+scan:
+	kubescape scan -f html > scans/new_scan.html
+### END OF KUBESCAPE CONFIG ###
+
+
+### SECURITY BEST PRACTICES ###
+##### Putting credentials in secrets #####
+web-secrets:
+	kubectl create secret generic web-secrets --from-env-file=web-secrets.env
+database-secrets:
+	kubectl create secret generic database-secrets --from-env-file=database-secrets.env
+secrets: databse-secrets web-secrets
+##### End of putting credentials in secrets #####
+### END OF SECURITY BEST PRACTICES ###
