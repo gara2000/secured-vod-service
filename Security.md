@@ -21,6 +21,22 @@ To scan for this security issue we should run
 ```bash
 kubescape scan control C-0012 -v
 ```
+#### Adding secrets
+We use linux env variables to store the secrets of the database and web applications, these env variables are stored in the `/secrets` folder.  
+Once we have the env variables set, we create the K8s secrets
+```bash
+make secrets
+```
+#### Scanning
+Now recreate the whole cluster again and run a new scan to see that the "Application credentials in configuration files" issue has been indeed solved.
+```bash
+make stop
+make cluster-delete
+make cluster-create
+make start
+export SCAN_NAME="secrets-scan"
+make scan
+```
 ### Adding network policies
 ### Solving Workload-related issues
 ### Access control
