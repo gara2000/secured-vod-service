@@ -34,6 +34,13 @@ The corresponding scans have a scan name: `secret_scan.html`, `secret_scan.pdf` 
 export SCAN_NAME="secret_scan"
 make scan
 ```
+### Adding Container limits
+This is not a security threat per se, but in order to ensure that a pod does not overuse the resources of the nodes.  
+We can scan for this issue using:
+```bash
+kubescape scan control C-0270 -v # CPU limits
+kubescape scan control C-0271 -v # Memory limits
+```
 ### Adding network policies
 ### Solving Workload-related issues
 ### Access control
