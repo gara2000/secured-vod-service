@@ -26,16 +26,28 @@ spec:
             - name: DB_NAME
               value: ginflix
             - name: DB_PASSWORD
-              value: tonic
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DB_PASSWORD
             - name: DB_USER
-              value: gin
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DB_USER
             - name: DJANGO_SUPERUSER_EMAIL
               value: "admin@ginflix.com"
             - name: DJANGO_SUPERUSER_PASSWORD
-              value: "admin"
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DJANGO_SUPERUSER_PASSWORD
             - name: GUNICORN_ENABLE
               value: "false"
             - name: SECRET_KEY
-              value: "secret"
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: SECRET_KEY
             - name: ALLOWED_HOST
               value: localhost

@@ -25,11 +25,20 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: ginflix
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: POSTGRES_DB
             - name: POSTGRES_PASSWORD
-              value: tonic
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_USER
-              value: gin
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: POSTGRES_USER
           volumeMounts:
             - mountPath: /var/lib/postgres/data
               name: db-volume
