@@ -71,14 +71,38 @@ clean: stop cluster-delete
 ### KUBESCAPE CONFIG ###
 kubescape:
 	curl -s https://raw.githubusercontent.com/kubescape/kubescape/master/install.sh | /bin/bash
-scan:
+full-scan:
 ifndef SCAN_NAME
 	@echo "Error: env var SCAN_NAME is not set. Please set it and try again." >&2
 	@exit 1
 endif
-	kubescape scan -f html > scans/$(SCAN_NAME).html
-	kubescape scan -f pdf > scans/$(SCAN_NAME).pdf
-	kubescape scan -f pretty-printer > scans/$(SCAN_NAME).pretty-printer
+	kubescape scan -f html > scans/full/$(SCAN_NAME).html
+	kubescape scan -f pdf > scans/full/$(SCAN_NAME).pdf
+	kubescape scan -f pretty-printer > scans/full/$(SCAN_NAME).pretty-printer
+web-scan:
+ifndef SCAN_NAME
+	@echo "Error: env var SCAN_NAME is not set. Please set it and try again." >&2
+	@exit 1
+endif
+	kubescape scan workload deployments/web --namespace default --format html > scans/web/$(SCAN_NAME).html
+	kubescape scan workload deployments/web --namespace default --format pdf > scans/web/$(SCAN_NAME).pdf
+	kubescape scan workload deployments/web --namespace default --format pretty-printer > scans/web/$(SCAN_NAME).pretty-printer
+streamer-scan:
+ifndef SCAN_NAME
+	@echo "Error: env var SCAN_NAME is not set. Please set it and try again." >&2
+	@exit 1
+endif
+	kubescape scan workload deployments/streamer --namespace default --format html > scans/streamer/$(SCAN_NAME).html
+	kubescape scan workload deployments/streamer --namespace default --format pdf > scans/streamer/$(SCAN_NAME).pdf
+	kubescape scan workload deployments/streamer --namespace default --format pretty-printer > scans/streamer/$(SCAN_NAME).pretty-printer
+database-scan:
+ifndef SCAN_NAME
+	@echo "Error: env var SCAN_NAME is not set. Please set it and try again." >&2
+	@exit 1
+endif
+	kubescape scan workload deployments/database --namespace default --format html > scans/database/$(SCAN_NAME).html
+	kubescape scan workload deployments/database --namespace default --format pdf > scans/database/$(SCAN_NAME).pdf
+	kubescape scan workload deployments/database --namespace default --format pretty-printer > scans/database/$(SCAN_NAME).pretty-printer
 ### END OF KUBESCAPE CONFIG ###
 
 
