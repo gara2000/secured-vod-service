@@ -28,13 +28,10 @@ Once we have the env variables set, we create the K8s secrets
 make secrets
 ```
 #### Scanning
-Now recreate the whole cluster again and run a new scan to see that the "Application credentials in configuration files" issue has been indeed solved.
+After changing the deployments configuration with adding the K8s secrets, we rerun our applications and run a new scan to see that the "Application credentials in configuration files" issue has been indeed solved.  
+The corresponding scans have a scan name: `secret_scan.html`, `secret_scan.pdf` and `secret_scan.pretty-printer`
 ```bash
-make stop
-make cluster-delete
-make cluster-create
-make start
-export SCAN_NAME="secrets-scan"
+export SCAN_NAME="secret_scan"
 make scan
 ```
 ### Adding network policies
