@@ -127,23 +127,40 @@ NP_FOLDER=network-policies
 web-np:
 	kubectl apply -f $(NP_FOLDER)/$(WEB_FILE)
 _web-np:
-	kubectl delete -f $(NP_FOLDER)/$(WEB_FILE)
+	- kubectl delete -f $(NP_FOLDER)/$(WEB_FILE)
 database-np:
 	kubectl apply -f $(NP_FOLDER)/$(DATABASE_FILE)
 _database-np:
-	kubectl delete -f $(NP_FOLDER)/$(DATABASE_FILE)
+	- kubectl delete -f $(NP_FOLDER)/$(DATABASE_FILE)
 streamer-np:
 	kubectl apply -f $(NP_FOLDER)/$(STREAMER_FILE)
 _streamer-np:
-	kubectl delete -f $(NP_FOLDER)/$(STREAMER_FILE)
+	- kubectl delete -f $(NP_FOLDER)/$(STREAMER_FILE)
 np: web-np database-np streamer-np
 _np: _web-np _database-np _streamer-np
 ##### End of Network policies #####
+##### Service Accounts #####
+SA_FOLDER=service-accounts
+web-sa:
+	kubectl apply -f $(SA_FOLDER)/$(WEB_FILE)
+_web-sa:
+	- kubectl delete -f $(SA_FOLDER)/$(WEB_FILE)
+database-sa:
+	kubectl apply -f $(SA_FOLDER)/$(DATABASE_FILE)
+_database-sa:
+	- kubectl delete -f $(SA_FOLDER)/$(DATABASE_FILE)
+streamer-sa:
+	kubectl apply -f $(SA_FOLDER)/$(STREAMER_FILE)
+_streamer-sa:
+	- kubectl delete -f $(SA_FOLDER)/$(STREAMER_FILE)
+sa: web-sa database-sa streamer-sa
+_sa: _web-sa _database-sa _streamer-sa
+##### End of Service Accounts #####
 ### END OF SECURITY BEST PRACTICES ###
 
 ### LAUNCHING THE APPLICATION ###
-launch: secrets metallb database streamer web caddy 
+launch: sa secrets metallb database streamer web caddy np 
 start:
 	while ! make launch ; do echo "Retrying..." ; sleep 20 ; done
-stop: _secrets _metallb _database _streamer _web _caddy
+stop: _secrets _metallb _database _streamer _web _caddy _np _sa
 ### END OF LAUNCHING THE APPLICATION ###

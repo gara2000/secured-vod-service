@@ -49,9 +49,12 @@ kubescape scan control C-0260 -v
 ```
 ### Adding service accounts
 Service accounts in Kubernetes are identities assigned to workloads (e.g., Pods) to authenticate with the Kubernetes API, enabling them to perform specific actions based on their associated roles and permissions.  
+In addition to defining service accounts, we disable the automatic mounting of service account token. When the service account token is mounted, the workload can potentially use it to make API requests, which could be exploited if the token is compromised.  
 To scan for this issue use:
 ```bash
 kubescape scan control C-0034 -v
 ```
+In our case we add 3 separate service accounts which ensures that a compromise in one workload does not impact the others, and also permits fine-tuning the permissions for each workload, avoiding over-permissioning.
+### Configuring RBAC
 ### Solving Workload-related issues
 ### Access control

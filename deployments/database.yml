@@ -14,6 +14,7 @@ spec:
       labels:
         run: database
     spec:
+      serviceAccountName: database-sa
       volumes:
         - name: db-volume
           persistentVolumeClaim:
