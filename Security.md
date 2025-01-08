@@ -42,5 +42,10 @@ kubescape scan control C-0270 -v # CPU limits
 kubescape scan control C-0271 -v # Memory limits
 ```
 ### Adding network policies
+Network policies in a Kubernetes cluster are crucial for controlling traffic flow between pods and external entities, enhancing security by restricting unauthorized access and minimizing the attack surface.  
+To scan for this issue use:
+```bash
+kubescape scan control C-0260 -v
+```
 ### Solving Workload-related issues
 ### Access control
