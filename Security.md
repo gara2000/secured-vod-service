@@ -28,15 +28,30 @@ Once we have the env variables set, we create the K8s secrets
 make secrets
 ```
 #### Scanning
-Now recreate the whole cluster again and run a new scan to see that the "Application credentials in configuration files" issue has been indeed solved.
+After changing the deployments configuration with adding the K8s secrets, we rerun our applications and run a new scan to see that the "Application credentials in configuration files" issue has been indeed solved.  
+The corresponding scans have a scan name: `secret_scan.html`, `secret_scan.pdf` and `secret_scan.pretty-printer`
 ```bash
-make stop
-make cluster-delete
-make cluster-create
-make start
-export SCAN_NAME="secrets-scan"
+export SCAN_NAME="secret_scan"
 make scan
 ```
+### Adding Container limits
+This is not a security threat per se, but in order to ensure that a pod does not overuse the resources of the nodes.  
+We can scan for this issue using:
+```bash
+kubescape scan control C-0270 -v # CPU limits
+kubescape scan control C-0271 -v # Memory limits
+```
 ### Adding network policies
+Network policies in a Kubernetes cluster are crucial for controlling traffic flow between pods and external entities, enhancing security by restricting unauthorized access and minimizing the attack surface.  
+To scan for this issue use:
+```bash
+kubescape scan control C-0260 -v
+```
+### Adding service accounts
+Service accounts in Kubernetes are identities assigned to workloads (e.g., Pods) to authenticate with the Kubernetes API, enabling them to perform specific actions based on their associated roles and permissions.  
+To scan for this issue use:
+```bash
+kubescape scan control C-0034 -v
+```
 ### Solving Workload-related issues
 ### Access control
