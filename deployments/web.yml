@@ -51,3 +51,7 @@ spec:
                   key: SECRET_KEY
             - name: ALLOWED_HOST
               value: localhost
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"

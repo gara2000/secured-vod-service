@@ -1,9 +1,12 @@
 CLUSTER_NAME=ginflix
 VID_NAME=stock_analysis.mp4
+WEB_FILE=web.yaml
+DATABASE_FILE=database.yaml
+STREAMER_FILE=streamer.yaml
 
 ### KIND CLUSTER CONFIG ###
 cluster-create:
-	- kind create cluster --name ${CLUSTER_NAME} --config kind-config.yml
+	- kind create cluster --name ${CLUSTER_NAME} --config kind-config.yml --image kindest/node:v1.31.4
 	- kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/tigera-operator.yaml
 	- kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.24.1/manifests/custom-resources.yaml
 cluster-delete:
@@ -107,17 +110,35 @@ scan: web-scan streamer-scan database-scan
 ##### Putting credentials in secrets #####
 SECRETS_FOLDER='secrets'
 web-secrets:
-	kubectl create secret generic web-secrets --from-env-file=$(SECRETS_FOLDER)/web-secrets.env
+	if ! kubectl get secret web-secrets ; then kubectl create secret generic web-secrets --from-env-file=$(SECRETS_FOLDER)/web-secrets.env ; fi
 _web-secrets:
 	- kubectl delete secrets web-secrets
 database-secrets:
-	kubectl create secret generic database-secrets --from-env-file=$(SECRETS_FOLDER)/database-secrets.env
+	if ! kubectl get secret database-secrets ; then kubectl create secret generic database-secrets --from-env-file=$(SECRETS_FOLDER)/database-secrets.env ; fi
 _database-secrets:
 	- kubectl delete secrets database-secrets
 secrets: database-secrets web-secrets
 _secrets: _web-secrets _database-secrets
 
 ##### End of putting credentials in secrets #####
+
+##### Network policies #####
+NP_FOLDER=network-policies
+web-np:
+	kubectl apply -f $(NP_FOLDER)/$(WEB_FILE)
+_web-np:
+	kubectl delete -f $(NP_FOLDER)/$(WEB_FILE)
+database-np:
+	kubectl apply -f $(NP_FOLDER)/$(DATABASE_FILE)
+_database-np:
+	kubectl delete -f $(NP_FOLDER)/$(DATABASE_FILE)
+streamer-np:
+	kubectl apply -f $(NP_FOLDER)/$(STREAMER_FILE)
+_streamer-np:
+	kubectl delete -f $(NP_FOLDER)/$(STREAMER_FILE)
+np: web-np database-np streamer-np
+_np: _web-np _database-np _streamer-np
+##### End of Network policies #####
 ### END OF SECURITY BEST PRACTICES ###
 
 ### LAUNCHING THE APPLICATION ###

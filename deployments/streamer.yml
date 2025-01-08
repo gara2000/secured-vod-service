@@ -26,6 +26,10 @@ spec:
               subPath: default.conf
             - mountPath: /var/www/html
               name: videos
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"
       volumes:
         - configMap:
             name: streamer-cm
