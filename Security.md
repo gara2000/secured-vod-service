@@ -47,5 +47,11 @@ To scan for this issue use:
 ```bash
 kubescape scan control C-0260 -v
 ```
+### Adding service accounts
+Service accounts in Kubernetes are identities assigned to workloads (e.g., Pods) to authenticate with the Kubernetes API, enabling them to perform specific actions based on their associated roles and permissions.  
+To scan for this issue use:
+```bash
+kubescape scan control C-0034 -v
+```
 ### Solving Workload-related issues
 ### Access control
