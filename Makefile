@@ -156,11 +156,28 @@ _streamer-sa:
 sa: web-sa database-sa streamer-sa
 _sa: _web-sa _database-sa _streamer-sa
 ##### End of Service Accounts #####
+##### RBAC #####
+RBAC_FOLDER=roles
+web-rbac:
+	kubectl apply -f $(RBAC_FOLDER)/$(WEB_FILE)
+_web-rbac:
+	- kubectl delete -f $(RBAC_FOLDER)/$(WEB_FILE)
+database-rbac:
+	kubectl apply -f $(RBAC_FOLDER)/$(DATABASE_FILE)
+_database-rbac:
+	- kubectl delete -f $(RBAC_FOLDER)/$(DATABASE_FILE)
+streamer-rbac:
+	kubectl apply -f $(RBAC_FOLDER)/$(STREAMER_FILE)
+_streamer-rbac:
+	- kubectl delete -f $(RBAC_FOLDER)/$(STREAMER_FILE)
+rbac: web-rbac database-rbac streamer-rbac
+_rbac: _web-rbac _database-rbac _streamer-rbac
+##### End of RBAC #####
 ### END OF SECURITY BEST PRACTICES ###
 
 ### LAUNCHING THE APPLICATION ###
-launch: sa secrets metallb database streamer web caddy np 
+launch: sa secrets metallb database streamer web caddy np rbac
 start:
 	while ! make launch ; do echo "Retrying..." ; sleep 20 ; done
-stop: _secrets _metallb _database _streamer _web _caddy _np _sa
+stop: _secrets _metallb _database _streamer _web _caddy _np _sa _rbac
 ### END OF LAUNCHING THE APPLICATION ###
