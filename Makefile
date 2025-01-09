@@ -103,6 +103,12 @@ endif
 	kubescape scan workload deployments/database --namespace default --format pdf > scans/database/$(SCAN_NAME).pdf
 	kubescape scan workload deployments/database --namespace default --format pretty-printer > scans/database/$(SCAN_NAME).pretty-printer
 scan: web-scan streamer-scan database-scan
+test-scan:
+ifndef SCAN_NAME
+	@echo "Error: env var SCAN_NAME is not set. Please set it and try again." >&2
+	@exit 1
+endif
+	kubescape scan workload deployments/web --namespace default --format pretty-printer > $(SCAN_NAME).pretty-printer
 ### END OF KUBESCAPE CONFIG ###
 
 

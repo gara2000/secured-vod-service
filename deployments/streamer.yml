@@ -31,6 +31,8 @@ spec:
             limits:
               memory: "1Gi"
               cpu: "1"
+          securityContext:
+            allowPrivilegeEscalation: false
       volumes:
         - configMap:
             name: streamer-cm

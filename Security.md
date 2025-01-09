@@ -61,5 +61,12 @@ In our case we don't have special roles to give each application, but in order t
 - The database pods need to access secrets, configmaps and persistent volume claims.  
 - The web app pods need to access secrets and configmaps.  
 - The streamer pods need to access configmaps and persistent volume claims
+### Disabling container privilege escalation
+privilege escalation refers to a process within a container gaining higher permissions than its parent process.  
+Our applications do not need any privilege escalation, hence adhering with the principle of least privilege we need to disable this option, by setting allowPrivilegeEscalation: false in the security context of the containers.  
+To scan for this issue use:
+```bash
+kubescape scan control C-0016 -v
+```
 ### Solving Workload-related issues
 ### Access control
