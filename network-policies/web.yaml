@@ -30,4 +30,4 @@ spec:
           kubernetes.io/metadata.name: kube-system  # Allow access to kube-system namespace for DNS
     ports:
     - protocol: UDP
-      port: 53  # DNS resolution uses UDP on port 53
+      port: 53  

@@ -54,7 +54,7 @@ Node escape
 │ ✅ │ Insecure capabilities          │ https://hub.armosec.io/docs/c-0046 │
 │ ❌ │ Linux hardening                │ https://hub.armosec.io/docs/c-0055 │
 │ ❌ │ Non-root containers            │ https://hub.armosec.io/docs/c-0013 │
-│ ✅ │ Privileged container           │ https://hub.armosec.io/docs/c-0057 │
+│ ✅ │ Privileged container           │ https:/Web App Pen Testing/hub.armosec.io/docs/c-0057 │
 └────┴────────────────────────────────┴────────────────────────────────────┘
 
 

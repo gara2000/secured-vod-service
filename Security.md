@@ -1,6 +1,5 @@
 # Kubernetes security with Kubescape
 ## Introduction
-Kubescape is ...  
 In this repo, we are going to use Kubescape in order to implement best practices in our K8s cluster.  
 In this repo, we focus on the High-stakes workloads defined as those which Kubescape estimates would have the highest impact if they were to be exploited, and which represent the application worlkload in our case (the web application, the database application and the streamer application).
 ## Kubescape installation
@@ -57,10 +56,7 @@ kubescape scan control C-0034 -v
 In our case we add 3 separate service accounts which ensures that a compromise in one workload does not impact the others, and also permits fine-tuning the permissions for each workload, avoiding over-permissioning.
 ### Configuring RBAC
 RBAC (Role-Based Access Control) is a security mechanism in Kubernetes that allows us to define roles and assign permissions to service accounts, users, or groups, controlling what actions can be performed on specific resources within the cluster. In our application, RBAC is essential to ensure that each workload (such as the web app, streamer server, and database server) has the least privilege necessary to perform its tasks, reducing the risk of unauthorized access or unintended actions.  
-In our case we don't have special roles to give each application, but in order to ensure the principle of least privilege we limit what each app can access.  
-- The database pods need to access secrets, configmaps and persistent volume claims.  
-- The web app pods need to access secrets and configmaps.  
-- The streamer pods need to access configmaps and persistent volume claims
+In our case the components we have, do not require any access to the Kubernetes resources inside the cluster hence they should be restricted from making any Kubernetes API calls.
 ### Disabling container privilege escalation
 privilege escalation refers to a process within a container gaining higher permissions than its parent process.  
 Our applications do not need any privilege escalation, hence adhering with the principle of least privilege we need to disable this option, by setting allowPrivilegeEscalation: false in the security context of the containers.  
@@ -68,5 +64,3 @@ To scan for this issue use:
 ```bash
 kubescape scan control C-0016 -v
 ```
-### Solving Workload-related issues
-### Access control
