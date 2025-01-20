@@ -14,6 +14,7 @@ spec:
       labels:
         run: database
     spec:
+      serviceAccountName: database-sa
       volumes:
         - name: db-volume
           persistentVolumeClaim:
@@ -25,11 +26,32 @@ spec:
             - containerPort: 5432
           env:
             - name: POSTGRES_DB
-              value: ginflix
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: POSTGRES_DB
             - name: POSTGRES_PASSWORD
-              value: tonic
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: POSTGRES_PASSWORD
             - name: POSTGRES_USER
-              value: gin
+              valueFrom:
+                secretKeyRef:
+                  name: database-secrets
+                  key: POSTGRES_USER
           volumeMounts:
             - mountPath: /var/lib/postgres/data
               name: db-volume
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          securityContext:
+            allowPrivilegeEscalation: false
+            # runAsNonRoot: true
+            # capabilities:
+            #   drop:
+            #   - ALL
+            #   add:
+            #   - NET_BIND_SERVICE

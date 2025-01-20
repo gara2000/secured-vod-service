@@ -14,6 +14,7 @@ spec:
       labels:
         run: web
     spec:
+      serviceAccountName: web-sa
       containers:
         - image: docker.io/gintelecom/ginflix
         # - image: nginx:latest
@@ -26,16 +27,40 @@ spec:
             - name: DB_NAME
               value: ginflix
             - name: DB_PASSWORD
-              value: tonic
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DB_PASSWORD
             - name: DB_USER
-              value: gin
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DB_USER
             - name: DJANGO_SUPERUSER_EMAIL
               value: "admin@ginflix.com"
             - name: DJANGO_SUPERUSER_PASSWORD
-              value: "admin"
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: DJANGO_SUPERUSER_PASSWORD
             - name: GUNICORN_ENABLE
               value: "false"
             - name: SECRET_KEY
-              value: "secret"
+              valueFrom:
+                secretKeyRef:
+                  name: web-secrets
+                  key: SECRET_KEY
             - name: ALLOWED_HOST
               value: localhost
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          securityContext:
+            allowPrivilegeEscalation: false
+            # runAsNonRoot: true
+            # capabilities:
+            #   drop:
+            #   - ALL
+            #   add:
+            #   - NET_BIND_SERVICE

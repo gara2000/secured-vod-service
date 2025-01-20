@@ -14,6 +14,7 @@ spec:
       labels:
         run: streamer
     spec:
+      serviceAccountName: streamer-sa
       containers:
         - image: nginx:latest
           name: streamer
@@ -26,6 +27,12 @@ spec:
               subPath: default.conf
             - mountPath: /var/www/html
               name: videos
+          resources:
+            limits:
+              memory: "1Gi"
+              cpu: "1"
+          securityContext:
+            allowPrivilegeEscalation: false
       volumes:
         - configMap:
             name: streamer-cm

@@ -85,7 +85,7 @@
       <tbody>
         <tr>
           <td>19</td>
-          <td>9</td>
+          <td>4</td>
           <td>1</td>
         </tr>
       </tbody>
@@ -108,27 +108,27 @@
         <tr>
           <td class="controlSeverityCell">High</td>
           <td class="controlNameCell">Applications credentials in configuration files</td>
+          <td class="controlRiskCell numericCell">0</td>
           <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">100</td>
+          <td class="controlRiskCell numericCell">0</td>
         </tr>
       </tr>
       
         <tr>
           <td class="controlSeverityCell">High</td>
           <td class="controlNameCell">Ensure CPU limits are set</td>
+          <td class="controlRiskCell numericCell">0</td>
           <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">100</td>
+          <td class="controlRiskCell numericCell">0</td>
         </tr>
       </tr>
       
         <tr>
           <td class="controlSeverityCell">High</td>
           <td class="controlNameCell">Ensure memory limits are set</td>
+          <td class="controlRiskCell numericCell">0</td>
           <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">100</td>
+          <td class="controlRiskCell numericCell">0</td>
         </tr>
       </tr>
       
@@ -189,18 +189,18 @@
         <tr>
           <td class="controlSeverityCell">Medium</td>
           <td class="controlNameCell">Allow privilege escalation</td>
+          <td class="controlRiskCell numericCell">0</td>
           <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">100</td>
+          <td class="controlRiskCell numericCell">0</td>
         </tr>
       </tr>
       
         <tr>
           <td class="controlSeverityCell">Medium</td>
           <td class="controlNameCell">Automatic mapping of service account</td>
-          <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">2</td>
-          <td class="controlRiskCell numericCell">50</td>
+          <td class="controlRiskCell numericCell">0</td>
+          <td class="controlRiskCell numericCell">5</td>
+          <td class="controlRiskCell numericCell">0</td>
         </tr>
       </tr>
       
@@ -234,9 +234,9 @@
         <tr>
           <td class="controlSeverityCell">Medium</td>
           <td class="controlNameCell">Missing network policy</td>
-          <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">3</td>
-          <td class="controlRiskCell numericCell">33</td>
+          <td class="controlRiskCell numericCell">0</td>
+          <td class="controlRiskCell numericCell">7</td>
+          <td class="controlRiskCell numericCell">0</td>
         </tr>
       </tr>
       
@@ -252,9 +252,9 @@
         <tr>
           <td class="controlSeverityCell">Medium</td>
           <td class="controlNameCell">Prefer using secrets as files over secrets as environment variables</td>
-          <td class="controlRiskCell numericCell">0</td>
           <td class="controlRiskCell numericCell">1</td>
-          <td class="controlRiskCell numericCell">0</td>
+          <td class="controlRiskCell numericCell">1</td>
+          <td class="controlRiskCell numericCell">100</td>
         </tr>
       </tr>
       
@@ -284,10 +284,10 @@
     </br>
     
     
-    <h3>Name: web</h3>
+    <h3>Name: database</h3>
       <p>ApiVersion: apps/v1</p>
       <p>Kind: Deployment</p>
-      <p>Name: web</p>
+      <p>Name: database</p>
       <p>Namespace: default</p>
       <table>
         <thead>
@@ -302,9 +302,16 @@
         
         <tr>
           <td class="resourceSeverityCell">Medium</td>
-          <td class="resourceNameCell">Missing network policy</td>
-          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0260">C-0260</a></td>
-          <td class="resourceRemediationCell"></td>
+          <td class="resourceNameCell">Prefer using secrets as files over secrets as environment variables</td>
+          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0207">C-0207</a></td>
+          <td class="resourceRemediationCell"> <p>spec.template.spec.containers[0].env[0].name</p>  <p>spec.template.spec.containers[0].env[1].name</p>  <p>spec.template.spec.containers[0].env[2].name</p> </td>
+        </tr>
+        
+        <tr>
+          <td class="resourceSeverityCell">Medium</td>
+          <td class="resourceNameCell">Linux hardening</td>
+          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0055">C-0055</a></td>
+          <td class="resourceRemediationCell"> <p>spec.template.spec.containers[0].securityContext.seccompProfile=YOUR_VALUE</p>  <p>spec.template.spec.containers[0].securityContext.seLinuxOptions=YOUR_VALUE</p>  <p>spec.template.spec.containers[0].securityContext.capabilities.drop[0]=YOUR_VALUE</p> </td>
         </tr>
         
         <tr>
@@ -319,48 +326,6 @@
           <td class="resourceNameCell">Immutable container filesystem</td>
           <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0017">C-0017</a></td>
           <td class="resourceRemediationCell"> <p>spec.template.spec.containers[0].securityContext.readOnlyRootFilesystem=true</p> </td>
-        </tr>
-        
-        <tr>
-          <td class="resourceSeverityCell">Medium</td>
-          <td class="resourceNameCell">Linux hardening</td>
-          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0055">C-0055</a></td>
-          <td class="resourceRemediationCell"> <p>spec.template.spec.containers[0].securityContext.seccompProfile=YOUR_VALUE</p>  <p>spec.template.spec.containers[0].securityContext.seLinuxOptions=YOUR_VALUE</p>  <p>spec.template.spec.containers[0].securityContext.capabilities.drop[0]=YOUR_VALUE</p> </td>
-        </tr>
-        
-        <tr>
-          <td class="resourceSeverityCell">High</td>
-          <td class="resourceNameCell">Ensure memory limits are set</td>
-          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0271">C-0271</a></td>
-          <td class="resourceRemediationCell"> <p>spec.template.spec.containers[0].resources.limits.memory=YOUR_VALUE</p> </td>
-        </tr>
-        
-        <tr>
-          <td class="resourceSeverityCell">Medium</td>
-          <td class="resourceNameCell">Allow privilege escalation</td>
-          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0016">C-0016</a></td>
-          <td class="resourceRemediationCell"> <p>spec.template.spec.containers[0].securityContext.allowPrivilegeEscalation=false</p>  <p>spec.template.spec.containers[0].securityContext.privileged=false</p> </td>
-        </tr>
-        
-        <tr>
-          <td class="resourceSeverityCell">Medium</td>
-          <td class="resourceNameCell">Automatic mapping of service account</td>
-          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0034">C-0034</a></td>
-          <td class="resourceRemediationCell"> <p>spec.template.spec.automountServiceAccountToken=false</p> </td>
-        </tr>
-        
-        <tr>
-          <td class="resourceSeverityCell">High</td>
-          <td class="resourceNameCell">Applications credentials in configuration files</td>
-          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0012">C-0012</a></td>
-          <td class="resourceRemediationCell"> <p>spec.template.spec.containers[0].env[2].name</p>  <p>spec.template.spec.containers[0].env[2].value</p>  <p>spec.template.spec.containers[0].env[5].name</p>  <p>spec.template.spec.containers[0].env[5].value</p>  <p>spec.template.spec.containers[0].env[7].name</p>  <p>spec.template.spec.containers[0].env[7].value</p> </td>
-        </tr>
-        
-        <tr>
-          <td class="resourceSeverityCell">High</td>
-          <td class="resourceNameCell">Ensure CPU limits are set</td>
-          <td class="resourceURLCell"><a href="https://hub.armosec.io/docs/c-0270">C-0270</a></td>
-          <td class="resourceRemediationCell"> <p>spec.template.spec.containers[0].resources.limits.cpu=YOUR_VALUE</p> </td>
         </tr>
         
         </tbody>
