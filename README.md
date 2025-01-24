@@ -1,5 +1,5 @@
 # GinFlix: Video on Demand application with Kubernetes
-
+> **⚠ Note**: Refer to the `Security.md` file for all the security measures implemented with kubescape
 ## Introduction
 This project is a scalable Video on Demand (VoD) application designed for streaming video content through a web interface built with Django. The system architecture includes a PostgreSQL database for storing videos' metadata, an Nginx streamer server for video delivery, and a Caddy reverse proxy to unify access points. The entire infrastructure is deployed on a Kubernetes cluster, ensuring high availability, and scalability, with persistent storage for both the database and the streamer servers.
 
