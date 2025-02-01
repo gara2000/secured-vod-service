@@ -64,3 +64,5 @@ To scan for this issue use:
 ```bash
 kubescape scan control C-0016 -v
 ```
+### Ignoring "Immutable container filesystem" threat
+Enforcing an immutable filesystem (readOnlyRootFilesystem: true) is a good security practice as it prevents unauthorized modifications, enhances container security, and reduces attack surfaces. However, in our case, we observed that our application fails when this restriction is applied, as it requires write access to the filesystem for essential operations. Given that functionality is a priority, we create a kubescape exception in order to ignore this issue when scanning, this will ensure that the final complience score won't be affected by this functional issue.

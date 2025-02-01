@@ -163,7 +163,9 @@ streamer-sa:
 	kubectl apply -f $(SA_FOLDER)/$(STREAMER_FILE)
 _streamer-sa:
 	- kubectl delete -f $(SA_FOLDER)/$(STREAMER_FILE)
-sa: web-sa database-sa streamer-sa
+default-sa:
+	kubectl patch serviceaccount default -p '{"automountServiceAccountToken": false}'
+sa: web-sa database-sa streamer-sa default-sa
 _sa: _web-sa _database-sa _streamer-sa
 ##### End of Service Accounts #####
 ##### RBAC #####
