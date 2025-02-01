@@ -1,0 +1,23 @@
+[
+    {
+        "name": "exclude-all-namespaces-other-than-default",
+        "actions": [
+            "alertOnly"
+        ],
+        "resources": [
+            {
+                "designatorType": "Attributes",
+                "attributes": {
+                    "kind": ".*",
+                    "namespace": "default"
+                }
+            }
+        ],
+        "posturePolicies": [
+          {
+            "frameworkName": "NSA",
+            "controlName": "Immutable container filesystem"
+          }
+        ]
+    }
+]
