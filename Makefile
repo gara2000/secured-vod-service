@@ -14,36 +14,40 @@ cluster-delete:
 ### END OF KIND CLUSTER CONFIG ###
 
 ### APPLICATION CONFIG ###
+DEPLOYMENTS=deployments
+SERVICES=services
+VOLUMES=volumes
+LOADBALANCER=loadbalancer
 metallb:
 	kubectl apply -f https://raw.githubusercontent.com/metallb/metallb/v0.13.7/config/manifests/metallb-native.yaml
-	kubectl apply -f loadbalancer/iprange.yml
-	kubectl apply -f loadbalancer/l2advertisement.yml
+	kubectl apply -f $(LOADBALANCER)/iprange.yml
+	kubectl apply -f $(LOADBALANCER)/l2advertisement.yml
 _metallb:
-	- kubectl delete -f loadbalancer/iprange.yml
-	- kubectl delete -f loadbalancer/l2advertisement.yml
+	- kubectl delete -f $(LOADBALANCER)/iprange.yml
+	- kubectl delete -f $(LOADBALANCER)/l2advertisement.yml
 database:
-	kubectl apply -f volumes/database.yml
-	kubectl apply -f deployments/database.yml
-	kubectl apply -f services/database.yml
+	kubectl apply -f $(VOLUMES)/database.yml
+	kubectl apply -f $(DEPLOYMENTS)/database.yml
+	kubectl apply -f $(SERVICES)/database.yml
 _database:
-	- kubectl delete -f deployments/database.yml
-	- kubectl delete -f volumes/database.yml
-	- kubectl delete -f services/database.yml
+	- kubectl delete -f $(DEPLOYMENTS)/database.yml
+	- kubectl delete -f $(VOLUMES)/database.yml
+	- kubectl delete -f $(SERVICES)/database.yml
 streamer:
-	kubectl apply -f volumes/streamer.yml
-	kubectl apply -f deployments/streamer.yml
-	kubectl apply -f services/streamer.yml
+	kubectl apply -f $(VOLUMES)/streamer.yml
+	kubectl apply -f $(DEPLOYMENTS)/streamer.yml
+	kubectl apply -f $(SERVICES)/streamer.yml
 _streamer:
-	- kubectl delete -f deployments/streamer.yml
-	- kubectl delete -f volumes/streamer.yml
-	- kubectl delete -f services/streamer.yml
+	- kubectl delete -f $(DEPLOYMENTS)/streamer.yml
+	- kubectl delete -f $(VOLUMES)/streamer.yml
+	- kubectl delete -f $(SERVICES)/streamer.yml
 web:
 	kubectl wait --for=condition=ready pod/$$(kubectl get pods --no-headers | awk -F' ' '{print $$1'} | grep database) --timeout=300s
-	kubectl apply -f deployments/web.yml
-	kubectl apply -f services/web.yml
+	kubectl apply -f $(DEPLOYMENTS)/web.yml
+	kubectl apply -f $(SERVICES)/web.yml
 _web:
-	- kubectl delete -f deployments/web.yml
-	- kubectl delete -f services/web.yml
+	- kubectl delete -f $(DEPLOYMENTS)/web.yml
+	- kubectl delete -f $(SERVICES)/web.yml
 caddy:
 	{ \
 		cd reverse-proxy ; \
